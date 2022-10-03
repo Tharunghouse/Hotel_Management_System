@@ -1,52 +1,207 @@
-# Prerequisites
-*.d
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_LIMIT 20
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+char dish[100][MAX_LIMIT]={"Butter Chicken","Chicken Chettinad","Fried chicken","Grilled chicken","Chicken Biriyani"};
 
-# Linker output
-*.ilk
-*.map
-*.exp
+struct dishes{
+    int n;
+    int rate;
+    struct dishes *link;
+};
 
-# Precompiled Headers
-*.gch
-*.pch
+typedef struct dishes dishes;
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+dishes *head=NULL;
+dishes *prev;
+dishes *curr;
+dishes *nodel;
+int size=5;
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+void create(int r)
+{
+    nodel = (dishes*)malloc(sizeof(dishes));
+    prev -> link = nodel;
+    prev = prev -> link;
+    size += 1; 
+    prev -> n = size;
+    prev -> rate = r;
+    prev -> link = NULL;
+}
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+void update(int no,int r)
+{
+    curr=head;
+    while(no != curr -> n)
+    {
+        curr = curr -> link;
+    }
+    curr -> rate =r;
+}
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+void display()
+{
+    curr = head;
+    int i=0;
+    printf("==================================================\n");
+    printf("                       MENU                       \n");
+    printf("==================================================\n");
+    while(curr != NULL)
+    {
+        printf("%4d|\t%25s    |\t%4d\n",curr->n,dish[i],curr->rate);
+        curr = curr -> link;
+        i++;
+    }
+    printf("---------------------------------------------------\n\n");
+}
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+void bill()
+{
+    printf("KINDLY ENTER YOUR NAME : ");
+    char name[20];
+    scanf("%s",name);
+    int no[100],qty[100],ch=1,i=0;
+    printf("Enter the item number and qty\n\n");
+    while(1)
+    {
+        if(ch==1)
+        {
+            printf("\n");
+            display();
+            printf("\n");
+            printf("Item no : ");
+            scanf("%d",&no[i]);
+            printf("Qty : ");
+            scanf("%d",&qty[i]);
+            i+=1;
+        }
+        else if(ch==2)
+        {
+            break;
+        }
+        else
+        {
+            printf("Invalid selection...\n\n");
+        }
+        printf("If You want to continue then ENTER 1 OR to exit ENTER 2\n\n");
+        scanf("%d",&ch);
+        printf("\n");
+    }
+    
+    int sum=0;
+    printf("Name : \t%s\n\n",name);
+    printf("==================================================\n");
+    printf("                       BILL                       \n");
+    printf("==================================================\n");
+    for(int j=0;j<i;j++)
+    {
+        curr=head;
+        while(no[j] != curr -> n)
+        {
+            curr = curr -> link;
+        }
+        printf("%4d|\t%20s    |%5d|\t%4d\n",j+1,dish[no[j]-1],qty[j],curr->rate);
+        sum = sum+(qty[j]*curr -> rate);
+    }
+    printf("==================================================\n");
+    printf("                       TOTAL              %5d     \n",sum);
+    printf("==================================================\n");
+    printf("\n\n\n");
+}
+
+int main()
+{
+    head = (dishes*)malloc(sizeof(dishes));
+    prev = head;
+    prev -> n = 1;
+    prev -> rate = 250;
+    
+    nodel =(dishes*)malloc(sizeof(dishes));
+    prev -> link = nodel;
+    prev = prev -> link;
+    prev -> n = 2;
+    prev -> rate = 150;
+    
+    nodel =(dishes*)malloc(sizeof(dishes));
+    prev -> link = nodel;
+    prev = prev -> link;
+    prev -> n = 3;
+    prev -> rate = 200;
+    
+    nodel =(dishes*)malloc(sizeof(dishes));
+    prev -> link = nodel;
+    prev = prev -> link;
+    prev -> n = 4;
+    prev -> rate = 300;
+    
+    nodel =(dishes*)malloc(sizeof(dishes));
+    prev -> link = nodel;
+    prev = prev -> link;
+    prev -> n = 5;
+    prev -> rate = 100;
+    prev -> link = NULL;
+    
+    
+    int c;
+    while(1)
+    {
+        printf("==================================================\n");
+        printf("===============  GHOUSE RESTURANT  ===============\n");
+        printf("==================================================\n\n");
+        
+        printf(" 1  |   Create Item \n");
+        printf(" 2  |   Bill the Items \n");
+        printf(" 3  |   Update Item rate \n");
+        printf(" 4  |   Show the Menu \n");
+        printf(" 5  |   Exit \n");
+        printf("--------------------------------------------------\n");
+        printf("KINDLY SELECT YOUR CHOICE... \n\n");
+        
+        scanf("%d",&c);
+        printf("\n");
+        int r;
+        if(c==1)
+        {
+            printf("KINDLY ENTER THE FOOD NAME WITHOUT ANY SPECES AND SPECIAL CHARACTERS\n");
+            printf("Enter the food name : ");
+            scanf("%s",dish[size]);
+            printf("Enter the Rate : ");
+            scanf("%d",&r);
+            create(r);
+            printf("\n\nItem created successfully...\n");
+            printf("\n\n");
+        }
+        else if(c==2)
+        {
+            bill();   
+        }
+        else if(c==3)
+        {
+            display();
+            printf("Enter the item number to update\n");
+            int no;
+            printf("Item No : ");
+            scanf("%d",&no);
+            printf("Rate : ");
+            scanf("%d",&r);
+            update(no,r);
+            printf("Rate updated successfully...\n\n\n");
+        }
+        else if(c==4)
+        {
+            display();
+        }
+        else if(c==5)
+        {
+            printf("\n\n\n-------------   THANK YOU   ------------- \n\n\n");
+            break;
+        }
+        else
+        {
+            printf("Invalid Selection, Try Again");
+        }
+    }
+}
+
+
